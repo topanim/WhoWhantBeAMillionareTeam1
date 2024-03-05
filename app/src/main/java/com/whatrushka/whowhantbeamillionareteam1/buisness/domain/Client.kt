@@ -1,4 +1,4 @@
-package com.whatrushka.whowhantbeamillionareteam1.domain
+package com.whatrushka.whowhantbeamillionareteam1.buisness.domain
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
