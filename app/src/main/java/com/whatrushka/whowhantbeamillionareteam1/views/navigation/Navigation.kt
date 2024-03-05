@@ -12,22 +12,29 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "screen_1"  // экран по умолчанию (названия лучше сохранять в константах)
+        startDestination = Screen.HomeScreen.route  // экран по умолчанию
     ) {
-        composable("screen_1"){
+        composable(route = Screen.HomeScreen.route){
             //просто функция компосабл в которой открывается разметка экрана
         }
-        composable("screen_2"){
+
+        composable(route = Screen.ProgressScreen.route){
 
         }
-        composable("screen_3"){
+
+        composable(route = Screen.QuestionScreen.route){
+
+        }
+
+        composable(route = Screen.WinScreen.route){
+
+        }
+
+        composable(route = Screen.LoseScreen.route){
 
         }
     }
 }
-
-
-
 
 
 
