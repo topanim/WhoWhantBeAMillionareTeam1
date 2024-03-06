@@ -21,3 +21,7 @@ data class Question(
     @SerialName("incorrect_answers")
     val incorrectAnswers: List<String>
 )
+
+fun Question.answers(): MutableList<String> = mutableListOf(this.correctAnswer).apply {
+    this.addAll(this@answers.incorrectAnswers)
+}
