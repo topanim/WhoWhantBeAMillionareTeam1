@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 data class QuestionsResponse(
     @SerialName("response_code")
     val responseCode: Int,
-
     val results: List<Question>
 )
 
