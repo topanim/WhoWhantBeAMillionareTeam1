@@ -10,10 +10,12 @@ class HallHelp : Hint(
     description = R.string.hall_help_description,
     icon = R.drawable.hall_of_people
 ) {
-    override fun call(question: Question, answers: List<String>): String =
-        ProbabilityHelper.returnWithProbability(
+    override fun call(question: Question, answers: List<String>): String {
+        super.call(question, answers)
+        return ProbabilityHelper.returnWithProbability(
             desired = question.correctAnswer,
             notDesired = question.incorrectAnswers,
             probability = 0.7f
         )
+    }
 }

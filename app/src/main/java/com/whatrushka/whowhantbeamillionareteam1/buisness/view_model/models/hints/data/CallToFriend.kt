@@ -10,10 +10,12 @@ class CallToFriend : Hint(
     description = R.string.call_to_friend_description,
     icon = R.drawable.call_to_friend
 ) {
-    override fun call(question: Question, answers: List<String>): String =
-         ProbabilityHelper.returnWithProbability(
+    override fun call(question: Question, answers: List<String>): String {
+        super.call(question, answers)
+        return ProbabilityHelper.returnWithProbability(
             desired = question.correctAnswer,
             notDesired = question.incorrectAnswers,
             probability = 0.7f
-         )
+        )
+    }
 }
