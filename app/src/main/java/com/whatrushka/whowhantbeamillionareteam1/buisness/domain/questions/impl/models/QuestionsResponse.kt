@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 data class QuestionsResponse(
     @SerialName("response_code")
     val responseCode: Int,
-
     val results: List<Question>
 )
 
@@ -21,3 +20,7 @@ data class Question(
     @SerialName("incorrect_answers")
     val incorrectAnswers: List<String>
 )
+
+fun Question.answers(): MutableList<String> = mutableListOf(this.correctAnswer).apply {
+    this.addAll(this@answers.incorrectAnswers)
+}
