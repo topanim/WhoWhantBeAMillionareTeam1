@@ -3,7 +3,9 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model
 import androidx.lifecycle.ViewModel
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.AnswerType
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.ApiImpl
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository.GameQuestionRepository
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 
 class QuestionsViewModel : ViewModel() {
     private val api = ApiImpl
@@ -24,5 +26,8 @@ class QuestionsViewModel : ViewModel() {
 
     fun answerQuestion(questionId: Int, answer: String) =
         gameQuestionRepository.answerQuestion(questionId, answer)
+
+    fun useHint(hint: Hint, question: Question, answers: List<String>) =
+        hint.call(question, answers)
 
 }
