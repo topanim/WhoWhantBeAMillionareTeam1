@@ -1,4 +1,4 @@
-package com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl.models
+package com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

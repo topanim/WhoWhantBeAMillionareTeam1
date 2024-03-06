@@ -1,4 +1,4 @@
-package com.whatrushka.whowhantbeamillionareteam1.domain.questions.api.models
+package com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models
 
 sealed class AnswerType(val name: String) {
     data object Multiple : AnswerType("multiple")
