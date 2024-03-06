@@ -5,7 +5,7 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.utils.ProbabilityHelper
 
-object CallToFriend : Hint(
+class CallToFriend : Hint(
     name = R.string.call_to_friend_name,
     description = R.string.call_to_friend_description,
     icon = R.drawable.call_to_friend

@@ -5,7 +5,7 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.utils.ProbabilityHelper
 
-object HallHelp : Hint(
+class HallHelp : Hint(
     name = R.string.hall_help_name,
     description = R.string.hall_help_description,
     icon = R.drawable.hall_of_people
