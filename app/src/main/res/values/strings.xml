@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">Who Whant Be A Millionare Team #1</string>
+    <string name="app_name">Become Millionaire</string>
+
+    <!--    Fifty Fifty    -->
+    <string name="fifty_fifty_name">50/50</string>
+    <string name="fifty_fifty_description">Убирает два неверных ответа</string>
+
+    <!--    Call To Friend    -->
+    <string name="call_to_friend_name">Звонок другу</string>
+    <string name="call_to_friend_description">С вероятностью 80% подскажет правильный ответ</string>
+
+    <!--    Hall Help    -->
+    <string name="hall_help_name">Помощь зала</string>
+    <string name="hall_help_description">"Указывает правильный ответ с вероятностью 70%"</string>
+
 </resources>
