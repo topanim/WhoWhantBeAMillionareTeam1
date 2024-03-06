@@ -1,13 +1,13 @@
-package com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl
+package com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl
 
-import com.whatrushka.whowhantbeamillionareteam1.domain.Client
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.api.ApiService
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.api.models.AnswerType
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.api.models.Command
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl.models.Question
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl.models.QuestionsResponse
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl.models.TokenRequest
-import com.whatrushka.whowhantbeamillionareteam1.domain.questions.impl.models.TokenReset
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.Client
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.ApiService
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.AnswerType
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.Command
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.QuestionsResponse
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.TokenRequest
+import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.TokenReset
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
