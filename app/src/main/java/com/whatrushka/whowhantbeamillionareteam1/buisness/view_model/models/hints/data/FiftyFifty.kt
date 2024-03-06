@@ -4,7 +4,7 @@ import com.whatrushka.whowhantbeamillionareteam1.R
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 
-class FiftyFifty : Hint(
+object FiftyFifty : Hint(
     name = R.string.fifty_fifty_name,
     description = R.string.fifty_fifty_description,
     icon = R.drawable.fifty_fifty
