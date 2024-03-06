@@ -7,7 +7,12 @@ abstract class Hint(
     val description: Int,
     val icon: Int
 ) {
-    var used = false
+    private var used = false
+
+    fun isUsed() = used
     
-    abstract fun call(question: Question, answers: List<String>): Any?
+    open fun call(question: Question, answers: List<String>): Any? {
+        used = true
+        return Unit
+    }
 }

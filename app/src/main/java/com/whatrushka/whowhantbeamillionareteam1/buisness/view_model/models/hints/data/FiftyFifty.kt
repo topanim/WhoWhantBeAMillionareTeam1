@@ -10,6 +10,7 @@ class FiftyFifty : Hint(
     icon = R.drawable.fifty_fifty
 ) {
     override fun call(question: Question, answers: List<String>): List<String> {
+        super.call(question, answers)
         val willBeRemoved = question
             .incorrectAnswers
             .shuffled()
