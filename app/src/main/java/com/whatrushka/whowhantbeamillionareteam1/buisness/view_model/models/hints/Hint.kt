@@ -7,5 +7,7 @@ abstract class Hint(
     val description: Int,
     val icon: Int
 ) {
+    var used = false
+    
     abstract fun call(question: Question, answers: List<String>): Any?
 }
