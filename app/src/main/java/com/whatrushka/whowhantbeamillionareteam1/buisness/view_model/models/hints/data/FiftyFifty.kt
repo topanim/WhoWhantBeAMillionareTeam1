@@ -5,11 +5,24 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 
 class FiftyFifty : Hint(
-    name = "50/50",
-    description = "Убирает два неверных ответа",
-    icon = R.drawable.ic_launcher_background
+    name = R.string.fifty_fifty_name,
+    description = R.string.fifty_fifty_description,
+    icon = R.drawable.fifty_fifty
 ) {
-    override fun call(question: Question): List<String> {
-        return emptyList()
+    override fun call(question: Question, answers: List<String>): List<String> {
+        val willBeRemoved = question
+            .incorrectAnswers
+            .shuffled()
+            .take(2)
+        val result = mutableListOf<String>()
+
+        answers.forEach {
+            result.add(
+                if (it in willBeRemoved) ""
+                else it
+            )
+        }
+
+        return result
     }
 }

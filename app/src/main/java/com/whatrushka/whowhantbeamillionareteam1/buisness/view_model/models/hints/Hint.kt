@@ -3,9 +3,9 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hin
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 
 abstract class Hint(
-    val name: String,
-    val description: String,
+    val name: Int,
+    val description: Int,
     val icon: Int
 ) {
-    abstract fun call(question: Question): List<String>
+    abstract fun call(question: Question, answers: List<String>): Any?
 }
