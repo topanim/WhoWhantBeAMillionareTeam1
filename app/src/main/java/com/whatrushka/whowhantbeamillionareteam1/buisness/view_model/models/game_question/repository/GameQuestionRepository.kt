@@ -1,5 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult
@@ -9,7 +10,12 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.utils.toGameQuestion
 
 class GameQuestionRepository {
+    private var _currentQuestion: Pair<Int, GameQuestion>? = null
     private val _questions = mutableStateOf(mutableMapOf<Int, GameQuestion>())
+
+    fun getCurrentQuestion() = _currentQuestion
+
+    fun getQuestion(id: Int) = _questions.value.getValue(id)
 
     fun getQuestions() = _questions
     fun getQuestionsList() = _questions.value.toList()
@@ -25,9 +31,14 @@ class GameQuestionRepository {
                 )
             )
         }
+
+        _currentQuestion = 0 to _questions.value.getValue(0)
     }
 
-    fun clearQuestionList() { _questions.value.clear() }
+    fun clearQuestionList() {
+        _currentQuestion = null
+        _questions.value.clear()
+    }
 
     fun answerQuestion(qKey: Int, answer: String): AnswerResult {
         val question = _questions.value.getValue(qKey)
