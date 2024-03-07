@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.sound.impl.Player
 import com.whatrushka.whowhantbeamillionareteam1.ui.theme.WhoWhantBeAMillionareTeam1Theme
+import com.whatrushka.whowhantbeamillionareteam1.views.screens.progress.ProgressScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +63,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     WhoWhantBeAMillionareTeam1Theme {
-        Greeting("Android")
+        ProgressScreen(11)
     }
 }
