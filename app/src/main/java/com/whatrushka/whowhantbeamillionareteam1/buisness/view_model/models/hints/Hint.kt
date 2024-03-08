@@ -2,7 +2,7 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hin
 
 import android.content.Context
 import android.widget.Toast
-import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 
 abstract class Hint(
     val context: Context,
@@ -14,10 +14,10 @@ abstract class Hint(
 
     private fun isUsed() = used
 
-    internal fun String.say() =
+    protected fun String.say() =
         also { sayResult(extendResult(this)) }
 
-    fun sayResult(result: String) {
+    private fun sayResult(result: String) {
         Toast.makeText(
             context,
             result,
@@ -25,10 +25,10 @@ abstract class Hint(
         ).show()
     }
 
-    abstract fun extendResult(result: String): String
+    protected abstract fun extendResult(result: String): String
 
     
-    open fun call(question: Question, answers: List<String>): Any? {
+    open fun call(question: GameQuestion): Any? {
         isUsed()
         return Unit
     }
