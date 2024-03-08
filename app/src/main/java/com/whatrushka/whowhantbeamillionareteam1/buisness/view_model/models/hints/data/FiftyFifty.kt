@@ -2,7 +2,7 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hin
 
 import android.content.Context
 import com.whatrushka.whowhantbeamillionareteam1.R
-import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 
 class FiftyFifty(context: Context) : Hint(
@@ -15,21 +15,21 @@ class FiftyFifty(context: Context) : Hint(
         TODO("Not yet implemented")
     }
 
-    override fun call(question: Question, answers: List<String>): List<String> {
-        super.call(question, answers)
+    override fun call(question: GameQuestion): List<String> {
+        super.call(question)
         val willBeRemoved = question
+            .questionObject
             .incorrectAnswers
             .shuffled()
             .take(2)
-        val result = mutableListOf<String>()
 
-        answers.forEach {
-            result.add(
-                if (it in willBeRemoved) ""
-                else it
-            )
-        }
-
-        return result
+        return mutableListOf<String>().also { list ->
+            question.getAnswers().forEach {
+                list.add(
+                    if (it in willBeRemoved) ""
+                    else it
+                )
+            }
+        }.also { question.updateAnswers(it) }
     }
 }

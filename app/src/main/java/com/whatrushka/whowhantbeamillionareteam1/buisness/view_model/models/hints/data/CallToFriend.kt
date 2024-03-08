@@ -2,7 +2,7 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hin
 
 import android.content.Context
 import com.whatrushka.whowhantbeamillionareteam1.R
-import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.utils.ProbabilityHelper
 
@@ -16,11 +16,11 @@ class CallToFriend(context: Context) : Hint(
         return "Друг подсказывает - $result"
     }
 
-    override fun call(question: Question, answers: List<String>): String {
-        super.call(question, answers)
+    override fun call(question: GameQuestion): String {
+        super.call(question)
         return ProbabilityHelper.returnWithProbability(
-            desired = question.correctAnswer,
-            notDesired = question.incorrectAnswers,
+            desired = question.questionObject.correctAnswer,
+            notDesired = question.questionObject.incorrectAnswers,
             probability = 0.7f
         ).say()
     }

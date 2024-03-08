@@ -11,43 +11,55 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game
 
 class GameQuestionRepository {
     private var _currentQuestion: Pair<Int, GameQuestion>? = null
-    private val _questions = mutableStateOf(mutableMapOf<Int, GameQuestion>())
+    private val _questions = mutableStateOf<Map<Int, GameQuestion>?>(null)
 
     fun getCurrentQuestion() = _currentQuestion
 
-    fun getQuestion(id: Int) = _questions.value.getValue(id)
+    fun getQuestion(id: Int) = _questions.value?.getValue(id)
 
     fun getQuestions() = _questions
-    fun getQuestionsList() = _questions.value.toList()
+
+    fun getQuestionsList() = _questions.value?.toList() ?: emptyList()
+
+    fun nextQuestion() {
+        val nextQuestionId = _currentQuestion?.first?.plus(1) ?: 0
+        if (nextQuestionId <= _questions.value!!.size.minus(1)) {
+            _currentQuestion = nextQuestionId to _questions.value!!.getValue(nextQuestionId)
+        }
+    }
 
     fun setQuestions(questions: List<Question>) {
         clearQuestionList()
-        questions.forEachIndexed { index: Int, it: Question ->
-            _questions.value.set(
-                key = index,
-                value = it.toGameQuestion(
-                    price = Prices.getValue(index),
-                    checkpoint = index in Checkpoints
+        _questions.value = mutableListOf<Pair<Int, GameQuestion>>().also { list ->
+            questions.forEachIndexed { index: Int, it: Question ->
+                list.add(
+                    index to it.toGameQuestion(
+                        price = Prices.getValue(index),
+                        checkpoint = index in Checkpoints
+                    )
                 )
-            )
-        }
+            }
+        }.toMap()
 
-        _currentQuestion = 0 to _questions.value.getValue(0)
+        _currentQuestion = 0 to _questions.value!!.getValue(0)
     }
 
     fun clearQuestionList() {
         _currentQuestion = null
-        _questions.value.clear()
+        _questions.value = null
     }
 
-    fun answerQuestion(qKey: Int, answer: String): AnswerResult {
-        val question = _questions.value.getValue(qKey)
-        question.answered = true
-        (question.questionObject.correctAnswer == answer).let {
-            question.answeredCorrectly = it
-            return when (it) {
-                true -> AnswerResult.Success
-                false -> AnswerResult.Fail
+    fun answerQuestion(qKey: Int, answer: String): AnswerResult? {
+        if (_questions.value == null) return null
+
+        return _questions.value?.getValue(qKey)?.let { gameQuestion ->
+            gameQuestion.answered = true
+            (gameQuestion.questionObject.correctAnswer == answer).let {
+                gameQuestion.answeredCorrectly = it
+                when (it) {
+                    true -> AnswerResult.Success
+                    false -> AnswerResult.Fail
+                }
             }
         }
     }
