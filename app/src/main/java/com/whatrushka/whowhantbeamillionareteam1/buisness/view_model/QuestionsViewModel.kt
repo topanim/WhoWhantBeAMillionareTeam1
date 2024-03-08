@@ -46,6 +46,10 @@ class QuestionsViewModel(
 
     fun useHint(hint: Hint, question: GameQuestion) = hint.call(question)
 
+    fun playQuestionBackground() { player.questionTimer() }
+
+    fun stopPlaying() { player.stop() }
+
     suspend fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
         player.beforeResultTimeout()
         delay(5000L)
