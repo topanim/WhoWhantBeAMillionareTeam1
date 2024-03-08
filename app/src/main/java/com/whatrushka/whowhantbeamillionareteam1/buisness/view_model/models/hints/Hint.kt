@@ -14,7 +14,7 @@ abstract class Hint(
 
     private fun isUsed() = used
 
-    internal fun String.say() =
+    protected fun String.say() =
         also { sayResult(extendResult(this)) }
 
     private fun sayResult(result: String) {
@@ -25,7 +25,7 @@ abstract class Hint(
         ).show()
     }
 
-    abstract fun extendResult(result: String): String
+    protected abstract fun extendResult(result: String): String
 
     
     open fun call(question: GameQuestion): Any? {

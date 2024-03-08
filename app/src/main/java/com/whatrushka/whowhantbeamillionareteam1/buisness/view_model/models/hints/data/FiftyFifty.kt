@@ -11,9 +11,7 @@ class FiftyFifty(context: Context) : Hint(
     description = R.string.fifty_fifty_description,
     icon = R.drawable.fifty_fifty
 ) {
-    override fun extendResult(result: String): String {
-        TODO("Not yet implemented")
-    }
+    override fun extendResult(result: String): String = ""
 
     override fun call(question: GameQuestion): List<String> {
         super.call(question)
