@@ -6,11 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
 import com.whatrushka.whowhantbeamillionareteam1.ui.theme.WhoWhantBeAMillionareTeam1Theme
+import com.whatrushka.whowhantbeamillionareteam1.views.screens.question.QuestionScreen
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,25 +25,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val navController = rememberNavController()
+                    val viewModel = QuestionsViewModel(applicationContext)
+                    LaunchedEffect(Unit){viewModel.startGame()}
+                    //val scope = rememberCoroutineScope()
+                    //scope.launch {  }
+                    QuestionScreen(viewModel = viewModel, navController = navController, modifier = Modifier)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WhoWhantBeAMillionareTeam1Theme {
-        Greeting("Android")
     }
 }
