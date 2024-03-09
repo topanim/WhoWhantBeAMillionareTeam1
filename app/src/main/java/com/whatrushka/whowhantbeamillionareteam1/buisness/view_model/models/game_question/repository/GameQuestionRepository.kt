@@ -34,7 +34,7 @@ class GameQuestionRepository {
             questions.forEachIndexed { index: Int, it: Question ->
                 list.add(
                     index to it.toGameQuestion(
-                        price = Prices.getValue(index),
+                        price = Prices.getValue(index.plus(1)),
                         checkpoint = index in Checkpoints
                     )
                 )

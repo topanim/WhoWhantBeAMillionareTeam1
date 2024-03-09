@@ -1,5 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl
 
+import android.util.Log
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.Client
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.ApiService
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.AnswerType
@@ -10,6 +11,7 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.TokenReset
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.request
 
 object ApiImpl: ApiService {
     override val client = Client
@@ -24,9 +26,9 @@ object ApiImpl: ApiService {
     override suspend fun startSession() {
         val response = client.get("$SCHEME://$DOMAIN/$PATH_TOKEN") {
             url { parameters.append("command", Command.Request.name) }
-        }.body<TokenRequest>()
-
-        sessionToken = response.token
+        }
+        Log.d("M", response.request.url.toString())
+        sessionToken = response.body<TokenRequest>().token
     }
 
     override suspend fun finishSession() {

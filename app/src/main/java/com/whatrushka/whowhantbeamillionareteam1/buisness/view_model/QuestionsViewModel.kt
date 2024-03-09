@@ -50,9 +50,8 @@ class QuestionsViewModel(
 
     fun stopPlaying() { player.stop() }
 
-    suspend fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
+     fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
         player.beforeResultTimeout()
-        delay(5000L)
         return gameQuestionRepository.answerQuestion(questionId, answer).also {
             gameQuestionRepository.nextQuestion()
             when (it) {
