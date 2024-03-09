@@ -21,19 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
-import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult
-import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository.GameQuestionRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
 fun QuestionScreen(
-    viewModel: QuestionsViewModel,
     navController: NavController,
-    modifier: Modifier
-){
-
+    viewModel: QuestionsViewModel,
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
+) {
     val getCurrentQuestion = viewModel.getCurrentQuestion()
     val scope = rememberCoroutineScope()
 
@@ -77,8 +74,6 @@ fun QuestionScreen(
                     Answer(qKey = it.first, pos = index, answer = s, onClick = onAnswer)
                 }
             }
-
-            Spacer(modifier = Modifier.height(48.dp))
 
             Row (
                 modifier = Modifier.fillMaxWidth(),

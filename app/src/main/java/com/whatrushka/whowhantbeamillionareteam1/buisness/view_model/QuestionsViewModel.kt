@@ -1,6 +1,8 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.AnswerType
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.ApiImpl
@@ -12,14 +14,13 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hint
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.data.FiftyFifty
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.data.HallHelp
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.sound.impl.Player
-import kotlinx.coroutines.delay
 
 class QuestionsViewModel(
     context: Context
 ) : ViewModel() {
     private val api = ApiImpl
     private val gameQuestionRepository = GameQuestionRepository()
-    private val player = Player(context)
+    val Player = Player(context)
     private val _hints = listOf(
         CallToFriend(context),
         FiftyFifty(context),
@@ -30,7 +31,6 @@ class QuestionsViewModel(
         api.startSession()
         val questions = api.fetchQuestions(amount = 15, type = AnswerType.Multiple)
         gameQuestionRepository.setQuestions(questions)
-        player.start()
     }
 
     suspend fun finishGame() {
@@ -40,28 +40,16 @@ class QuestionsViewModel(
 
     fun getCurrentQuestion(): Pair<Int, GameQuestion>? = gameQuestionRepository.getCurrentQuestion()
 
-    fun getQuestions(): List<Pair<Int, GameQuestion>> = gameQuestionRepository.getQuestionsList()
+    fun getQuestions(): MutableState<Map<Int, GameQuestion>?> = gameQuestionRepository.getQuestions()
 
     fun getHints(): List<Hint> = _hints
 
     fun useHint(hint: Hint, question: GameQuestion) = hint.call(question)
 
-    fun playQuestionBackground() { player.questionTimer() }
 
-    fun stopPlaying() { player.stop() }
-
-     fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
-        player.beforeResultTimeout()
+    fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
         return gameQuestionRepository.answerQuestion(questionId, answer).also {
             gameQuestionRepository.nextQuestion()
-            when (it) {
-                AnswerResult.Fail -> player.incorrectAnswer()
-                AnswerResult.Success -> {
-                    if (questionId == 14) player.winMillion()
-                    else player.correctAnswer()
-                }
-                null -> null
-            }
         }
     }
 }

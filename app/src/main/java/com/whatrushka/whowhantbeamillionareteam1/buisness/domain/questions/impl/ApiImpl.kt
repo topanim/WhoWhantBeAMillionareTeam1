@@ -13,7 +13,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.request
 
-object ApiImpl: ApiService {
+object ApiImpl : ApiService {
     override val client = Client
 
     private const val SCHEME = "https"
@@ -46,6 +46,6 @@ object ApiImpl: ApiService {
                 parameters.append("amount", amount.toString())
                 parameters.append("type", type.name)
             }
-    }.body<QuestionsResponse>().results
+        }.body<QuestionsResponse>().results
 }
 

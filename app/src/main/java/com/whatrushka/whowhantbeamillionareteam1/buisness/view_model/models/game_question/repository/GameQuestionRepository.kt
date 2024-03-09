@@ -1,6 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository
 
-import androidx.compose.runtime.getValue
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult

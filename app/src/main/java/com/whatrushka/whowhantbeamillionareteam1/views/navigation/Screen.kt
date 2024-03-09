@@ -6,6 +6,5 @@ sealed class Screen (
     data object HomeScreen : Screen ("home_Screen")
     data object ProgressScreen : Screen ("progress_Screen")
     data object QuestionScreen : Screen ("question_screen")
-    data object LoseScreen : Screen ("lose_screen")
-    data object WinScreen : Screen ("winScreen_screen")
+    data object FinishScreen : Screen ("finish_screen")
 }
