@@ -10,78 +10,104 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository.GameQuestionRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-
-@Preview(showBackground = true)
 @Composable
-fun QuestionScreen(){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+fun QuestionScreen(
+    viewModel: QuestionsViewModel,
+    navController: NavController,
+    modifier: Modifier
+){
 
-            ){
-            Button(onClick = { /*TODO*/ }) {
+    val getCurrentQuestion = viewModel.getCurrentQuestion()
+    val scope = rememberCoroutineScope()
 
+    getCurrentQuestion?.let{
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+
+                ){
+                Button(onClick = { /*TODO*/ }) {
+
+                }
+
+                Text(text = getCurrentQuestion.first.plus(1).toString() )
+
+                Button(onClick = { /*TODO*/ }) {
+
+                }
             }
 
-            Text(text = "valueOfQuestion")
+            Spacer(modifier = Modifier.height(48.dp))
 
-            Button(onClick = { /*TODO*/ }) {
+            Text(text = CountdownTimer().toString())
 
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Text(text = getCurrentQuestion.second.questionObject.question)
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Column {
+                it.second.getAnswers().forEachIndexed { index, s ->
+                    val onAnswer: (Int, String) -> AnswerResult? = { qKey: Int, answer: String ->
+                        viewModel.answerQuestion(qKey, answer)
+                    }
+                    Answer(qKey = it.first, pos = index, answer = s, onClick = onAnswer)
+                }
             }
-        }
-        Spacer(modifier = Modifier.height(48.dp))
 
-        Text(text = "time")
-        Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
-        Text(text = "quastion")
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Button(onClick = { /*TODO*/ }) {
-            
-        }
-        Button(onClick = { /*TODO*/ }) {
-
-        }
-        Button(onClick = { /*TODO*/ }) {
-
-        }
-        Button(onClick = { /*TODO*/ }) {
-
-        }
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        Row (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-
-        ){
-            Button(onClick = { /*TODO*/ }) {
-
-            }
-            Button(onClick = { /*TODO*/ }) {
-
-            }
-            Button(onClick = { /*TODO*/ }) {
-
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                ){
+                viewModel.getHints().forEach{
+                    HintComponent(hint = it, gameQuestion = getCurrentQuestion.second)
+                }
             }
         }
     }
+}
 
-    //закомитеть в дев
-    //заверджить со своей веткой
-    //
+
+@Composable
+fun CountdownTimer() {
+    var timeRemaining by remember { mutableStateOf(30L) }
+
+    LaunchedEffect(Unit) {
+        while (timeRemaining > 0) {
+            delay(1000) // Подождать 1 секунду
+            timeRemaining--
+        }
+    }
+
+    Text(text = formatTime(timeRemaining))
+}
+
+fun formatTime(seconds: Long): String {
+    val remainingSeconds = seconds % 60
+    return "00:${String.format("%02d", remainingSeconds)}"
 }
