@@ -25,29 +25,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.millionerv20.ui.theme.Millionerv20Theme
+import androidx.navigation.NavController
+import com.whatrushka.whowhantbeamillionareteam1.R
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
+import kotlinx.coroutines.CoroutineScope
+
+
+val typography = Typography(
+    bodyLarge = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    )
+)
 
 @Composable
-fun WinLoseScreen(title: String,
-                  modifier: Modifier = Modifier,
-                  viewModel: QuestionsViewModel?,
-                  nv: NavController?) {
+fun FinishScreen(
+    navController: NavController,
+    viewModel: QuestionsViewModel,
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
+) {
     Image(
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
         modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.FillBounds
     )
-    val Typography = Typography(
-        bodyLarge = TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.15.sp
-        )
-    )
-    Column (modifier = Modifier
-        .fillMaxHeight(0.5f),
+
+    Column(
+        modifier = Modifier
+            .fillMaxHeight(0.5f),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -68,7 +77,7 @@ fun WinLoseScreen(title: String,
         Spacer(modifier = Modifier.height(340.dp))
 
         Text(
-            text = title,
+            text = "Hello",
             style = MaterialTheme.typography.titleMedium,
             color = Color.White,
             fontSize = 38.sp
@@ -80,10 +89,11 @@ fun WinLoseScreen(title: String,
             color = Color.Gray,
             fontSize = 19.sp
         )
-        Row ( modifier = Modifier.fillMaxWidth(),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.coin),
                 contentDescription = null,
@@ -114,8 +124,8 @@ fun WinLoseScreen(title: String,
     }
 
 
-
 }
+
 @Composable
 fun YellowImageButton() {
     Box(
@@ -147,14 +157,5 @@ fun BlueImageButton() {
                 .height(100.dp)
 
         )
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Millionerv20Theme {
-        WinLoseScreen("Game over!")
     }
 }

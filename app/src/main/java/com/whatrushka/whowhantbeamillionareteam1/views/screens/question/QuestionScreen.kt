@@ -14,14 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
+import kotlinx.coroutines.CoroutineScope
 
 
-
-@Preview(showBackground = true)
 @Composable
-fun QuestionScreen(){
+fun QuestionScreen(
+    navController: NavController,
+    viewModel: QuestionsViewModel,
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -50,7 +56,7 @@ fun QuestionScreen(){
         Spacer(modifier = Modifier.height(48.dp))
 
         Button(onClick = { /*TODO*/ }) {
-            
+
         }
         Button(onClick = { /*TODO*/ }) {
 
@@ -80,8 +86,4 @@ fun QuestionScreen(){
             }
         }
     }
-
-    //закомитеть в дев
-    //заверджить со своей веткой
-    //
 }

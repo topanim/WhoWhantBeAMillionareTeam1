@@ -1,6 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository
 
-import androidx.compose.runtime.getValue
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult
@@ -34,7 +34,7 @@ class GameQuestionRepository {
             questions.forEachIndexed { index: Int, it: Question ->
                 list.add(
                     index to it.toGameQuestion(
-                        price = Prices.getValue(index),
+                        price = Prices.getValue(index.plus(1)),
                         checkpoint = index in Checkpoints
                     )
                 )
