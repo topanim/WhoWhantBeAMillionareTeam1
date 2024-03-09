@@ -1,6 +1,7 @@
 
 val ktor_version: String by project
 val kotlin_serialization_version: String by project
+val nav_version: String by project
 
 
 plugins {
@@ -56,12 +57,9 @@ android {
 }
 
 dependencies {
-
-
-    val nav_version = "2.7.7"
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlin_serialization_version")

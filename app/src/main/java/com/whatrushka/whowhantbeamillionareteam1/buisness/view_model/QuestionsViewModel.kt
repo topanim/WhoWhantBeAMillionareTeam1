@@ -1,7 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.api.models.AnswerType
@@ -20,7 +19,7 @@ class QuestionsViewModel(
 ) : ViewModel() {
     private val api = ApiImpl
     private val gameQuestionRepository = GameQuestionRepository()
-    val Player = Player(context)
+    val player = Player(context)
     private val _hints = listOf(
         CallToFriend(context),
         FiftyFifty(context),
@@ -46,10 +45,11 @@ class QuestionsViewModel(
 
     fun useHint(hint: Hint, question: GameQuestion) = hint.call(question)
 
+    fun nextQuestion() {
+        gameQuestionRepository.nextQuestion()
+    }
 
     fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
-        return gameQuestionRepository.answerQuestion(questionId, answer).also {
-            gameQuestionRepository.nextQuestion()
-        }
+        return gameQuestionRepository.answerQuestion(questionId, answer)
     }
 }

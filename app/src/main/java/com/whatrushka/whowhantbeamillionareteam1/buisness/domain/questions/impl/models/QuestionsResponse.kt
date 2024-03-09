@@ -1,5 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models
 
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,9 +15,9 @@ data class QuestionsResponse(
 data class Question(
     val type: String,
     val category: String,
-    val question: String,
+    var question: String,
     @SerialName("correct_answer")
-    val correctAnswer: String,
+    var correctAnswer: String,
     @SerialName("incorrect_answers")
-    val incorrectAnswers: List<String>
+    var incorrectAnswers: List<String>
 )

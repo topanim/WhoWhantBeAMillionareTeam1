@@ -12,7 +12,8 @@ abstract class Hint(
 ) {
     private var used = false
 
-    private fun isUsed() = used
+    protected fun isUsed() = used
+    private fun used() { used = true}
 
     protected fun String.say() =
         also { sayResult(extendResult(this)) }
@@ -28,8 +29,8 @@ abstract class Hint(
     protected abstract fun extendResult(result: String): String
 
     
-    open fun call(question: GameQuestion): Any? {
-        isUsed()
+    open fun call(question: GameQuestion) {
+        used()
         return Unit
     }
 }

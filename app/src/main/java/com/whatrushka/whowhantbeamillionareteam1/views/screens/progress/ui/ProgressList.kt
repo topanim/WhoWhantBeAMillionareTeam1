@@ -14,7 +14,9 @@ import com.whatrushka.whowhantbeamillionareteam1.R
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 
 @Composable
-fun ProgressList(questions: List<Pair<Int, GameQuestion>>, currentQuestion: Pair<Int, GameQuestion>?) {
+fun ProgressList(
+    questions: List<Pair<Int, GameQuestion>>
+) {
     Column(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -23,15 +25,13 @@ fun ProgressList(questions: List<Pair<Int, GameQuestion>>, currentQuestion: Pair
             .padding(bottom = 50.dp)
     ) {
         questions.reversed().forEach {
-            val isCurrentQuestion = it.first == (currentQuestion?.first ?: 0)
             val finalCell = it.first == 14
             ProgressCell(
-                backgroundResource = if (isCurrentQuestion || it.second.answered) R.drawable.current_cell_bg
+                backgroundResource = if (it.second.answered) R.drawable.current_cell_bg
                 else if (it.second.checkpoint) R.drawable.safe_cell_bg
                 else if (finalCell) R.drawable.top_cell_bg
                 else R.drawable.regular_cell_bg,
-                questionNumber = "${it.first.plus(1)}:",
-                rewardText = it.second.price.toString()
+                question = it
             )
         }
     }

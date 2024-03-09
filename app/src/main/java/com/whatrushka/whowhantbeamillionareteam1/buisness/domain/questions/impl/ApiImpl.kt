@@ -26,9 +26,9 @@ object ApiImpl : ApiService {
     override suspend fun startSession() {
         val response = client.get("$SCHEME://$DOMAIN/$PATH_TOKEN") {
             url { parameters.append("command", Command.Request.name) }
-        }
-        Log.d("M", response.request.url.toString())
-        sessionToken = response.body<TokenRequest>().token
+        }.body<TokenRequest>()
+
+        sessionToken = response.token
     }
 
     override suspend fun finishSession() {

@@ -1,6 +1,7 @@
 package com.whatrushka.whowhantbeamillionareteam1.views.navigation
 
 import FinishScreen
+import HomeScreen
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -29,7 +30,7 @@ fun Navigation(viewModel: QuestionsViewModel, modifier: Modifier = Modifier) {
         startDestination = Screen.HomeScreen.route
     ) {
         composable(route = Screen.HomeScreen.route){
-            FakeHomeScreen(navController = navController,
+            HomeScreen(navController = navController,
                 viewModel = viewModel,
                 scope = scope,
                 modifier = modifier
@@ -61,23 +62,3 @@ fun Navigation(viewModel: QuestionsViewModel, modifier: Modifier = Modifier) {
         }
     }
 }
-
-@Composable
-fun FakeHomeScreen(
-    navController: NavController,
-    viewModel: QuestionsViewModel,
-    scope: CoroutineScope,
-    modifier: Modifier = Modifier
-) {
-
-    Column {
-        Button(onClick = {
-            scope.launch { viewModel.startGame() }
-            navController.navigate(Screen.ProgressScreen.route)
-        }) {
-            Text(text = "toHome")
-        }
-    }
-}
-
-

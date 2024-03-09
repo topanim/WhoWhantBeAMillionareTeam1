@@ -36,14 +36,15 @@ fun ProgressScreen(
 ) {
     val questions = viewModel.getQuestions()
     val currentQuestion = viewModel.getCurrentQuestion()
+
     LaunchedEffect(key1 = questions.value) {
         questions.value?.let {
             delay(5000)
             runBlocking {
                 if ((currentQuestion?.first ?: 0) == 15) {
-                    navController.navigate(Screen.QuestionScreen.route)
-                } else {
                     navController.navigate(Screen.FinishScreen.route)
+                } else {
+                    navController.navigate(Screen.QuestionScreen.route)
                 }
             }
         }
@@ -63,7 +64,7 @@ fun ProgressScreen(
         )
 
         questions.value?.let {
-            ProgressList(questions = it.toList(), currentQuestion = currentQuestion)
+            ProgressList(questions = it.toList())
         }
     }
 }

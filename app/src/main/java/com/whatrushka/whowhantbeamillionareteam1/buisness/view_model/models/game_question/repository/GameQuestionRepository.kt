@@ -40,8 +40,6 @@ class GameQuestionRepository {
                 )
             }
         }.toMap()
-
-        _currentQuestion = 0 to _questions.value!!.getValue(0)
     }
 
     fun clearQuestionList() {
@@ -50,9 +48,9 @@ class GameQuestionRepository {
     }
 
     fun answerQuestion(qKey: Int, answer: String): AnswerResult? {
-        if (_questions.value == null) return null
-
+        if (_questions.value == null || qKey != (_currentQuestion?.first ?: 0)) return null
         return _questions.value?.getValue(qKey)?.let { gameQuestion ->
+            if (gameQuestion.answered) { return null }
             gameQuestion.answered = true
             (gameQuestion.questionObject.correctAnswer == answer).let {
                 gameQuestion.answeredCorrectly = it

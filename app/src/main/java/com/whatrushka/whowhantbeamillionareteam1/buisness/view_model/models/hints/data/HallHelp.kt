@@ -16,9 +16,9 @@ class HallHelp(context: Context) : Hint(
         return "Зал вангует что правильный ответ - $result"
     }
 
-    override fun call(question: GameQuestion): String {
+    override fun call(question: GameQuestion) {
         super.call(question)
-        return ProbabilityHelper.returnWithProbability(
+        ProbabilityHelper.returnWithProbability(
             desired = question.questionObject.correctAnswer,
             notDesired = question.questionObject.incorrectAnswers,
             probability = 0.7f

@@ -1,5 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.views.screens.question
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,21 +8,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
+import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.AnswerResult
+import com.whatrushka.whowhantbeamillionareteam1.views.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 @Composable
@@ -31,56 +36,70 @@ fun QuestionScreen(
     scope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val getCurrentQuestion = viewModel.getCurrentQuestion()
-    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.nextQuestion()
+        viewModel.player.questionTimer()
+    }
+    val currentQuestion = viewModel.getCurrentQuestion()
+    var answerClicked by remember {
+        mutableStateOf(false)
+    }
 
-    getCurrentQuestion?.let{
+    currentQuestion?.let {
         Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row (
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-
-                ){
-                Button(onClick = { /*TODO*/ }) {
-
-                }
-
-                Text(text = getCurrentQuestion.first.plus(1).toString() )
-
-                Button(onClick = { /*TODO*/ }) {
-
-                }
-            }
-
             Spacer(modifier = Modifier.height(48.dp))
 
-            Text(text = CountdownTimer().toString())
-
-            Spacer(modifier = Modifier.height(48.dp))
-
-            Text(text = getCurrentQuestion.second.questionObject.question)
+            CountdownTimer()
+            Text(text = currentQuestion.second.questionObject.question)
+            Text(text = "Question ${currentQuestion.first.plus(1)}")
 
             Spacer(modifier = Modifier.height(48.dp))
 
             Column {
-                it.second.getAnswers().forEachIndexed { index, s ->
-                    val onAnswer: (Int, String) -> AnswerResult? = { qKey: Int, answer: String ->
-                        viewModel.answerQuestion(qKey, answer)
+                val onAnswer: (Int, String) -> AnswerResult? = { qKey: Int, answer: String ->
+                    answerClicked = true
+                    val answerResult = viewModel.answerQuestion(qKey, answer)
+                    scope.launch {
+                        delay(5000)
+                        viewModel.player.stop()
+                        when (answerResult) {
+                            AnswerResult.Fail -> viewModel.player.incorrectAnswer()
+                            AnswerResult.Success -> viewModel.player.correctAnswer()
+                            else -> {}
+                        }
+                        delay(2000)
+                        runBlocking {
+                            navController.navigate(Screen.ProgressScreen.route)
+                        }
                     }
-                    Answer(qKey = it.first, pos = index, answer = s, onClick = onAnswer)
+                    answerResult
+                }
+
+                currentQuestion.second.getAnswers().forEachIndexed { index, s ->
+                    Answer(
+                        qKey = currentQuestion.first,
+                        pos = index,
+                        answer = s,
+                        answerClicked = answerClicked,
+                        onClick = onAnswer
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
 
             Row (
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                ){
-                viewModel.getHints().forEach{
-                    HintComponent(hint = it, gameQuestion = getCurrentQuestion.second)
+                horizontalArrangement = Arrangement.SpaceAround
+            ){
+                viewModel.getHints().forEach{ hint ->
+                    HintComponent(
+                        hint = hint,
+                        gameQuestion = currentQuestion.second
+                    )
                 }
             }
         }
@@ -90,11 +109,11 @@ fun QuestionScreen(
 
 @Composable
 fun CountdownTimer() {
-    var timeRemaining by remember { mutableStateOf(30L) }
+    var timeRemaining by remember { mutableLongStateOf(30L) }
 
     LaunchedEffect(Unit) {
-        while (timeRemaining > 0) {
-            delay(1000) // Подождать 1 секунду
+        while (timeRemaining < 30) {
+            delay(1000)
             timeRemaining--
         }
     }
