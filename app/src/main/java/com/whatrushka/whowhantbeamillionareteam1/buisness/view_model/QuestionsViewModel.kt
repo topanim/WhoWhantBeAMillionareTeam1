@@ -46,6 +46,7 @@ class QuestionsViewModel(
 
     fun useHint(hint: Hint, question: GameQuestion) = hint.call(question)
 
+
     fun answerQuestion(questionId: Int, answer: String): AnswerResult? {
         return gameQuestionRepository.answerQuestion(questionId, answer).also {
             gameQuestionRepository.nextQuestion()
