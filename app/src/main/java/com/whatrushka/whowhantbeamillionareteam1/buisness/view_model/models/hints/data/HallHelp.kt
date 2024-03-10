@@ -17,11 +17,14 @@ class HallHelp(context: Context) : Hint(
     }
 
     override fun call(question: GameQuestion) {
+        if (isUsed().value) return
         super.call(question)
+
         ProbabilityHelper.returnWithProbability(
             desired = question.questionObject.correctAnswer,
             notDesired = question.questionObject.incorrectAnswers,
             probability = 0.7f
         ).say()
+
     }
 }

@@ -27,9 +27,14 @@ fun ProgressList(
         questions.reversed().forEach {
             val finalCell = it.first == 14
             ProgressCell(
-                backgroundResource = if (it.second.answered) R.drawable.current_cell_bg
-                else if (it.second.checkpoint) R.drawable.safe_cell_bg
+                backgroundResource = if (it.second.answered) {
+                    if (it.second.answeredCorrectly == true)
+                        R.drawable.current_cell_bg
+                    else
+                        R.drawable.answer_state_incorrect
+                }
                 else if (finalCell) R.drawable.top_cell_bg
+                else if (it.second.checkpoint) R.drawable.safe_cell_bg
                 else R.drawable.regular_cell_bg,
                 question = it
             )

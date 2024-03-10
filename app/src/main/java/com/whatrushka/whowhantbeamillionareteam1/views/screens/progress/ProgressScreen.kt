@@ -41,7 +41,9 @@ fun ProgressScreen(
         questions.value?.let {
             delay(5000)
             runBlocking {
-                if ((currentQuestion?.first ?: 0) == 15) {
+                if ((currentQuestion?.first ?: 0) == 15 ||
+                    viewModel.lastAnsweredQuestion()?.second?.answeredCorrectly == false
+                ) {
                     navController.navigate(Screen.FinishScreen.route)
                 } else {
                     navController.navigate(Screen.QuestionScreen.route)

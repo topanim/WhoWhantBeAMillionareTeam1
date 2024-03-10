@@ -17,6 +17,10 @@ import androidx.compose.ui.unit.dp
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hints.Hint
 
+object HintState {
+    val Active = Color(0xFF278ED5)
+    val InActive = Color(0xFF18425F)
+}
 
 @Composable
 fun HintComponent(
@@ -26,8 +30,9 @@ fun HintComponent(
     Box(modifier = Modifier
         .clip(RoundedCornerShape(15.dp))
         .size(60.dp)
-        .background(Color(0xFF278ED5))
-        .clickable { hint.call(gameQuestion) }
+        .background(
+            if (hint.isUsed().value) HintState.InActive else HintState.Active
+        ).clickable { hint.call(gameQuestion) }
     ) {
         Icon(painter = painterResource(id = hint.icon), contentDescription = stringResource(id = hint.name))
     }

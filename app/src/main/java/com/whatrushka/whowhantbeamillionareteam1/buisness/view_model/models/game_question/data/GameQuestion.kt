@@ -1,5 +1,7 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
 
 data class GameQuestion(
@@ -9,22 +11,23 @@ data class GameQuestion(
     val checkpoint: Boolean = false,
     val questionObject: Question
 ) {
-    private var _answers: List<String>? = null
+    private var _answers = mutableStateOf<List<String>?>(null)
 
-    private fun initAnswers(): List<String> = mutableListOf(questionObject.correctAnswer)
-        .also {
-            it.addAll(questionObject.incorrectAnswers)
-        }.shuffled()
+    private fun initAnswers() {
+        _answers.value = mutableListOf(questionObject.correctAnswer)
+            .also {
+                it.addAll(questionObject.incorrectAnswers)
+            }.shuffled()
+    }
 
-    fun getAnswers(): List<String> {
-        _answers?.let { return _answers as List<String> }
-        return initAnswers().also {
-            _answers = it
-        }
+    fun getAnswers(): MutableState<List<String>?> {
+        _answers.value?.let { return _answers }
+        initAnswers()
+        return _answers
     }
 
     fun updateAnswers(updatedAnswers: List<String>) {
-        _answers = updatedAnswers
+        _answers.value = updatedAnswers
     }
 }
 

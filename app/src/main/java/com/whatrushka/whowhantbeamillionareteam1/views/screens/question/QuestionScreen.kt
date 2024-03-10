@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
@@ -41,8 +42,8 @@ fun QuestionScreen(
         viewModel.player.questionTimer()
     }
     val currentQuestion = viewModel.getCurrentQuestion()
-    var answerClicked by remember {
-        mutableStateOf(false)
+    val answerClicked = remember {
+        mutableStateOf<Int?>(null)
     }
 
     currentQuestion?.let {
@@ -53,22 +54,37 @@ fun QuestionScreen(
         ) {
             Spacer(modifier = Modifier.height(48.dp))
 
-            CountdownTimer()
-            Text(text = currentQuestion.second.questionObject.question)
-            Text(text = "Question ${currentQuestion.first.plus(1)}")
+            Text(text = "Question ${it.first.plus(1)}",
+                color = Color.White
+            )
+            Text(text = it.second.questionObject.question,
+                color = Color.White
+            )
+            Timer(seconds = 30L, answered = answerClicked) {
+               viewModel.player.incorrectAnswer()
+               viewModel.answerIncorrectQuestion(currentQuestion.first)
+               navController.navigate(Screen.ProgressScreen.route)
+            }
 
             Spacer(modifier = Modifier.height(48.dp))
 
             Column {
-                val onAnswer: (Int, String) -> AnswerResult? = { qKey: Int, answer: String ->
-                    answerClicked = true
+                val onAnswer: (Int, position: Int, String) -> AnswerResult? = {
+                    qKey: Int, position: Int, answer: String ->
+
+                    answerClicked.value = position
                     val answerResult = viewModel.answerQuestion(qKey, answer)
                     scope.launch {
+                        viewModel.player.beforeResultTimeout()
                         delay(5000)
-                        viewModel.player.stop()
                         when (answerResult) {
                             AnswerResult.Fail -> viewModel.player.incorrectAnswer()
-                            AnswerResult.Success -> viewModel.player.correctAnswer()
+                            AnswerResult.Success -> {
+                                if (viewModel.getQuestion(qKey)?.checkpoint == true)
+                                    viewModel.player.winMillion()
+                                else
+                                    viewModel.player.correctAnswer()
+                            }
                             else -> {}
                         }
                         delay(2000)
@@ -79,12 +95,14 @@ fun QuestionScreen(
                     answerResult
                 }
 
-                currentQuestion.second.getAnswers().forEachIndexed { index, s ->
+                it.second.getAnswers().value?.forEachIndexed { index, s ->
                     Answer(
-                        qKey = currentQuestion.first,
-                        pos = index,
+                        qKey = it.first,
+                        pos = index.plus(1),
                         answer = s,
-                        answerClicked = answerClicked,
+                        answerClicked = answerClicked.value,
+                        scope = scope,
+                        viewModel = viewModel,
                         onClick = onAnswer
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -98,7 +116,7 @@ fun QuestionScreen(
                 viewModel.getHints().forEach{ hint ->
                     HintComponent(
                         hint = hint,
-                        gameQuestion = currentQuestion.second
+                        gameQuestion = it.second
                     )
                 }
             }
@@ -106,22 +124,3 @@ fun QuestionScreen(
     }
 }
 
-
-@Composable
-fun CountdownTimer() {
-    var timeRemaining by remember { mutableLongStateOf(30L) }
-
-    LaunchedEffect(Unit) {
-        while (timeRemaining < 30) {
-            delay(1000)
-            timeRemaining--
-        }
-    }
-
-    Text(text = formatTime(timeRemaining))
-}
-
-fun formatTime(seconds: Long): String {
-    val remainingSeconds = seconds % 60
-    return "00:${String.format("%02d", remainingSeconds)}"
-}
