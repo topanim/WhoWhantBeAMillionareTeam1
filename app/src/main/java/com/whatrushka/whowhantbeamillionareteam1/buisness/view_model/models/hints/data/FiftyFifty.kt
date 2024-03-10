@@ -13,16 +13,18 @@ class FiftyFifty(context: Context) : Hint(
 ) {
     override fun extendResult(result: String): String = ""
 
-    override fun call(question: GameQuestion): List<String> {
+    override fun call(question: GameQuestion) {
+        if (isUsed().value) return
         super.call(question)
+
         val willBeRemoved = question
             .questionObject
             .incorrectAnswers
             .shuffled()
             .take(2)
 
-        return mutableListOf<String>().also { list ->
-            question.getAnswers().forEach {
+        mutableListOf<String>().also { list ->
+            question.getAnswers().value?.forEach {
                 list.add(
                     if (it in willBeRemoved) ""
                     else it
@@ -30,4 +32,5 @@ class FiftyFifty(context: Context) : Hint(
             }
         }.also { question.updateAnswers(it) }
     }
+
 }

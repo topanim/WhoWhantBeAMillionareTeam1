@@ -2,6 +2,8 @@ package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.hin
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.data.GameQuestion
 
 abstract class Hint(
@@ -10,9 +12,11 @@ abstract class Hint(
     val description: Int,
     val icon: Int
 ) {
-    private var used = false
+    private var used = mutableStateOf(false)
 
-    private fun isUsed() = used
+    fun isUsed() = used
+
+    private fun used() { used.value = true}
 
     protected fun String.say() =
         also { sayResult(extendResult(this)) }
@@ -28,8 +32,7 @@ abstract class Hint(
     protected abstract fun extendResult(result: String): String
 
     
-    open fun call(question: GameQuestion): Any? {
-        isUsed()
-        return Unit
+    open fun call(question: GameQuestion) {
+        used()
     }
 }

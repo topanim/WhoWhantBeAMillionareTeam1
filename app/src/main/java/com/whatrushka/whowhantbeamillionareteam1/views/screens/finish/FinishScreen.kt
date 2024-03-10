@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,17 +17,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.whatrushka.whowhantbeamillionareteam1.R
 import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.QuestionsViewModel
+import com.whatrushka.whowhantbeamillionareteam1.views.navigation.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 val typography = Typography(
@@ -47,12 +47,7 @@ fun FinishScreen(
     scope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    Image(
-        painter = painterResource(id = R.drawable.background),
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.FillBounds
-    )
+    val lastAnsweredCheckpointQuestion = viewModel.lastAnsweredCheckpointQuestion()
 
     Column(
         modifier = Modifier
@@ -77,18 +72,12 @@ fun FinishScreen(
         Spacer(modifier = Modifier.height(340.dp))
 
         Text(
-            text = "Hello",
+            text = "Game Over",
             style = MaterialTheme.typography.titleMedium,
             color = Color.White,
             fontSize = 38.sp
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Level 8",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray,
-            fontSize = 19.sp
-        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -103,7 +92,7 @@ fun FinishScreen(
 
             )
             Text(
-                text = "$15,000",
+                text = (lastAnsweredCheckpointQuestion?.second?.price ?: 0).toString(),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White,
                 fontSize = 29.sp
@@ -117,8 +106,8 @@ fun FinishScreen(
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            YellowImageButton()
-            BlueImageButton()
+            NewGameButton(navController, viewModel, scope)
+            MainScreenButton(navController, viewModel, scope)
             Spacer(modifier = Modifier.height(75.dp))
         }
     }
@@ -127,10 +116,22 @@ fun FinishScreen(
 }
 
 @Composable
-fun YellowImageButton() {
+fun NewGameButton(
+    navController: NavController,
+    viewModel: QuestionsViewModel,
+    scope: CoroutineScope
+) {
     Box(
         modifier = Modifier
-            .clickable { println("") }
+            .clickable {
+                scope.launch {
+                    viewModel.finishGame()
+                    viewModel.startGame()
+                    runBlocking {
+                        navController.navigate(Screen.ProgressScreen.route)
+                    }
+                }
+            }
     ) {
 
         Image(
@@ -144,10 +145,19 @@ fun YellowImageButton() {
 }
 
 @Composable
-fun BlueImageButton() {
+fun MainScreenButton(
+    navController: NavController,
+    viewModel: QuestionsViewModel,
+    scope: CoroutineScope
+) {
     Box(
         modifier = Modifier
-            .clickable { println("") },
+            .clickable {
+                scope.launch {
+                    viewModel.finishGame()
+                }
+                navController.navigate(Screen.HomeScreen.route)
+            },
     ) {
         Image(
             painter = painterResource(id = R.drawable.button_blue),
@@ -155,7 +165,6 @@ fun BlueImageButton() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
-
         )
     }
 }

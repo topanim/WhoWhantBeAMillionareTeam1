@@ -1,5 +1,6 @@
 package com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game_question.repository
 
+import android.support.v4.os.IResultReceiver._Parcel
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import com.whatrushka.whowhantbeamillionareteam1.buisness.domain.questions.impl.models.Question
@@ -12,6 +13,10 @@ import com.whatrushka.whowhantbeamillionareteam1.buisness.view_model.models.game
 class GameQuestionRepository {
     private var _currentQuestion: Pair<Int, GameQuestion>? = null
     private val _questions = mutableStateOf<Map<Int, GameQuestion>?>(null)
+
+    fun lastAnsweredQuestion(): Pair<Int, GameQuestion>? = _questions.value?.toList()?.lastOrNull { it.second.answered }
+    fun lastAnsweredCheckpointQuestion(): Pair<Int, GameQuestion>? =
+        _questions.value?.toList()?.lastOrNull { it.second.answered && it.second.checkpoint }
 
     fun getCurrentQuestion() = _currentQuestion
 
@@ -40,8 +45,6 @@ class GameQuestionRepository {
                 )
             }
         }.toMap()
-
-        _currentQuestion = 0 to _questions.value!!.getValue(0)
     }
 
     fun clearQuestionList() {
@@ -49,10 +52,19 @@ class GameQuestionRepository {
         _questions.value = null
     }
 
-    fun answerQuestion(qKey: Int, answer: String): AnswerResult? {
-        if (_questions.value == null) return null
+    fun answerIncorrectQuestion(qKey: Int) {
+        _questions.value?.let { questionMap ->
+            val question = questionMap.getValue(qKey).let {
+                it.answered = true
+                it.answeredCorrectly = false
+            }
+        }
+    }
 
-        return _questions.value?.getValue(qKey)?.let { gameQuestion ->
+    fun answerQuestion(qKey: Int, answer: String): AnswerResult? {
+        if (_questions.value == null || qKey != (_currentQuestion?.first ?: 0)) return null
+        return getQuestion(qKey)?.let { gameQuestion ->
+            if (gameQuestion.answered) { return null }
             gameQuestion.answered = true
             (gameQuestion.questionObject.correctAnswer == answer).let {
                 gameQuestion.answeredCorrectly = it

@@ -1,11 +1,13 @@
 package com.whatrushka.whowhantbeamillionareteam1.views.navigation
 
 import FinishScreen
+import HomeScreen
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -24,12 +26,18 @@ fun Navigation(viewModel: QuestionsViewModel, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.player.stop()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route
     ) {
         composable(route = Screen.HomeScreen.route){
-            FakeHomeScreen(navController = navController,
+            HomeScreen(navController = navController,
                 viewModel = viewModel,
                 scope = scope,
                 modifier = modifier
@@ -61,23 +69,3 @@ fun Navigation(viewModel: QuestionsViewModel, modifier: Modifier = Modifier) {
         }
     }
 }
-
-@Composable
-fun FakeHomeScreen(
-    navController: NavController,
-    viewModel: QuestionsViewModel,
-    scope: CoroutineScope,
-    modifier: Modifier = Modifier
-) {
-
-    Column {
-        Button(onClick = {
-            scope.launch { viewModel.startGame() }
-            navController.navigate(Screen.ProgressScreen.route)
-        }) {
-            Text(text = "toHome")
-        }
-    }
-}
-
-
